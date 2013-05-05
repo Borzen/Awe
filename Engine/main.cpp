@@ -28,8 +28,10 @@
 #include "PhysXObject.h"
 #include "EnginePhysics.h"
 #include <vector>
+#include "Instance.h"
 
 // Constants
+
 static const float kLightRotationSpeed = 0.05f;
 static const float kSliderFactorResolution = 10000.0f;
 
@@ -42,6 +44,7 @@ enum SCENE_SELECTION {
     SPONZA_SCENE,
 	MULTI_SCENE,
 	CUBES,
+	INSTANCE,
 };
 
 enum {
@@ -73,7 +76,7 @@ enum {
 
 
 App* gApp = 0;
-
+Instance b;
 CFirstPersonCamera gViewerCamera;
 
 SceneGraph sceneGraph;
@@ -226,6 +229,7 @@ void InitUI()
         gSceneSelectCombo->AddItem(L"Sponza", ULongToPtr(SPONZA_SCENE));
 		gSceneSelectCombo->AddItem(L"Multi Object Scene", ULongToPtr(MULTI_SCENE));
 		gSceneSelectCombo->AddItem(L"CUBES", ULongToPtr(CUBES));
+		gSceneSelectCombo->AddItem(L"Instance",ULongToPtr(INSTANCE));
 #pragma endregion
 
 #pragma region Add Options Checkboxes and sliders
@@ -357,6 +361,39 @@ void InitScene(ID3D11Device* d3dDevice)
             cameraAt = sceneScaling * D3DXVECTOR3(0.0f, 0.0f, 0.0f);
         } break;
 
+		case INSTANCE:{
+			sceneScaling = 1.0f;
+
+			D3DXMatrixScaling(&gWorldMatrix, sceneScaling, sceneScaling, sceneScaling);
+			if (zAxisUp) {
+				D3DXMATRIXA16 m;
+				D3DXMatrixRotationX(&m, -D3DX_PI / 2.0f);
+				gWorldMatrix *= m;
+			}
+			{
+				D3DXMATRIXA16 t;
+				D3DXMatrixTranslation(&t, sceneTranslation.x, sceneTranslation.y, sceneTranslation.z);
+				gWorldMatrix *= t;
+			}
+
+			sceneGraph.StartScene(gWorldMatrix,sceneScaling);
+			D3DXMATRIXA16 translate;
+			D3DXMatrixTranslation(&translate,0,0,0);
+			
+			D3DXMATRIXA16 s;
+			D3DXMatrixScaling(&s,100,0.01,100);
+			s=s*translate;
+
+			
+			b.Initialize(d3dDevice,L"none");
+			LoadSkybox(d3dDevice, L"..\\media\\Skybox\\EmptySpace.dds");
+
+            cameraEye = sceneScaling * D3DXVECTOR3(100.0f, 5.0f, 5.0f);
+            cameraAt = sceneScaling * D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			
+
+			}break;
+
         case POWER_PLANT_SCENE: {
             sceneScaling = 1.0f;
 
@@ -465,6 +502,7 @@ void InitScene(ID3D11Device* d3dDevice)
 
 			//Initializing PhysX
 			EnginePhysics::InitializePhysX(cubeList);
+
 
 			//Creating all of the cubes
 			for(int i = 0; i < cubeList->size(); i++)
@@ -733,7 +771,6 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* d3dDevice, ID3D11DeviceContext* d
     if (!sceneGraph.IsLoaded()) {
         InitScene(d3dDevice);
     }
-
 	EnginePhysics::StepPhysX();
 	if(cubeList)
 	{
@@ -745,6 +782,7 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* d3dDevice, ID3D11DeviceContext* d
 		}
 	}
 
+	b.Render(d3dDeviceContext);
     ID3D11RenderTargetView* pRTV = DXUTGetD3D11RenderTargetView();
 	
     
@@ -755,7 +793,7 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* d3dDevice, ID3D11DeviceContext* d
     viewport.MaxDepth = 1.0f;
     viewport.TopLeftX = 0.0f;
     viewport.TopLeftY = 0.0f;
-
+	
 		 gApp->Render(d3dDeviceContext, pRTV, sceneGraph, gSkyboxSRV,
         gWorldMatrix, &gViewerCamera, &viewport, &gUIConstants);
 	
