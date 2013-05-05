@@ -2,7 +2,6 @@
 
 Instance::Instance()
 {
-	m_vertexBuffer = 0;
 	m_instanceBuffer = 0;
 }
 
@@ -127,25 +126,6 @@ void Instance::ShutdownBuffers()
 
 void Instance::RenderBuffers(ID3D11DeviceContext* deviceContext)
 {
-	unsigned int strides[2];
-	unsigned int offsets[2];
-	ID3D11Buffer* bufferPointers[2];
-
-
-	// Set the buffer strides.
-
-	// Set the buffer offsets.
-	offsets[0] = 0;
-	offsets[1] = 0;
-    
-	// Set the array of pointers to the vertex and instance buffers.
-	bufferPointers[1] = m_instanceBuffer;
-
-	// Set the vertex buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetVertexBuffers(0, 2, bufferPointers, strides, offsets);
-
-    // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	return;
 }

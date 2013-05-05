@@ -31,7 +31,6 @@
 #include "Instance.h"
 
 // Constants
-
 static const float kLightRotationSpeed = 0.05f;
 static const float kSliderFactorResolution = 10000.0f;
 
@@ -76,7 +75,7 @@ enum {
 
 
 App* gApp = 0;
-Instance modelInstance;
+
 CFirstPersonCamera gViewerCamera;
 
 SceneGraph sceneGraph;
@@ -383,48 +382,28 @@ void InitScene(ID3D11Device* d3dDevice)
 			D3DXMATRIXA16 s;
 			D3DXMatrixScaling(&s,100,0.01,100);
 			s=s*translate;
-
-			D3DXVECTOR3 b[] = {
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f,-1.0f), 
-				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
-				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
-				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
-				D3DXVECTOR3(1.0f,-1.0f, 1.0f)
-			};
-
-			modelInstance.Initialize(d3dDevice,b);
 			
+			sceneGraph.Add(d3dDevice, L"..\\media\\cube\\cube.sdkmesh",s);
+			Instance modalInstances;
+			D3DXVECTOR3 b[] = {
+				D3DXVECTOR3(0.0f,0.0f,0.0f),
+				D3DXVECTOR3(1.0f,0.0f,0.0f)
+			};
+			modalInstances.Initialize(d3dDevice,2,b);
+			
+			//int difmodels
+			
+			//Instance modalInstances[(number of different models from the scene graph)];
+			//for(int i = 0; i < ; i++){
+			
+
+			//int a gets how many times a model is in the scene graph
+			//int a = 0;
+			
+			//b gets the position of all of the models from the scene graph
+			//D3DXVECTOR3 b[10];
+				//modalInstances[i].Initialize(d3dDevice,a,b);
+			//}
 			
 			LoadSkybox(d3dDevice, L"..\\media\\Skybox\\EmptySpace.dds");
 
@@ -586,6 +565,7 @@ void InitScene(ID3D11Device* d3dDevice)
 void DestroyScene()
 {
 	EnginePhysics::ShutdownPhysX();
+
 	sceneGraph.Destroy();
 	/*gMeshOpaque.Destroy();
 	gMeshOpaque2.Destroy();
@@ -813,6 +793,7 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* d3dDevice, ID3D11DeviceContext* d
         InitScene(d3dDevice);
     }
 	EnginePhysics::StepPhysX();
+
 	if(cubeList)
 	{
 		for(int i = 0; i < cubeList->size(); i++)
