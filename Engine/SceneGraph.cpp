@@ -158,3 +158,6 @@ void SceneGraph::Destroy()
 		positionList.clear();
 	}
 }
+CDXUTSDKMesh* SceneGraph::GetMesh(){
+	return meshList[0];
+}

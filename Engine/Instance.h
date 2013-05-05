@@ -14,12 +14,6 @@
 class Instance
 {
 private:
-	struct VertexType
-	{
-		D3DXVECTOR3 position;
-	    D3DXVECTOR2 texture;
-	};
-
 	struct InstanceType
 	{
 		D3DXVECTOR3 position;
@@ -30,23 +24,21 @@ public:
 	Instance(const Instance&);
 	~Instance();
 
-	bool Initialize(ID3D11Device*, WCHAR*);
+	bool Initialize(ID3D11Device*, int, D3DXVECTOR3*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
-
-	int GetVertexCount();
+	bool UpdatePos(D3DXVECTOR3);
 	int GetInstanceCount();
 	
+	
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers(ID3D11Device*,int,D3DXVECTOR3*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 
 
 private:
-	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_instanceBuffer;
-	int m_vertexCount;
 	int m_instanceCount;
 };
 

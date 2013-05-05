@@ -76,7 +76,7 @@ enum {
 
 
 App* gApp = 0;
-Instance b;
+Instance modelInstance;
 CFirstPersonCamera gViewerCamera;
 
 SceneGraph sceneGraph;
@@ -384,8 +384,48 @@ void InitScene(ID3D11Device* d3dDevice)
 			D3DXMatrixScaling(&s,100,0.01,100);
 			s=s*translate;
 
+			D3DXVECTOR3 b[] = {
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f,-1.0f), 
+				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(1.0f,-1.0f,-1.0f),
+				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f,-1.0f, 1.0f),
+				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f,-1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(-1.0f, 1.0f, 1.0f),
+				D3DXVECTOR3(1.0f,-1.0f, 1.0f)
+			};
+
+			modelInstance.Initialize(d3dDevice,b);
 			
-			b.Initialize(d3dDevice,L"none");
+			
 			LoadSkybox(d3dDevice, L"..\\media\\Skybox\\EmptySpace.dds");
 
             cameraEye = sceneScaling * D3DXVECTOR3(100.0f, 5.0f, 5.0f);
@@ -412,6 +452,7 @@ void InitScene(ID3D11Device* d3dDevice)
 			sceneGraph.StartScene(gWorldMatrix,sceneScaling);
 
 			sceneGraph.Add(d3dDevice, L"..\\media\\powerplant\\powerplant.sdkmesh");
+
 			//gMeshOpaque.Create(d3dDevice, L"..\\media\\powerplant\\powerplant.sdkmesh");
             LoadSkybox(d3dDevice, L"..\\media\\Skybox\\EmptySpace.dds");
 
@@ -782,7 +823,6 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* d3dDevice, ID3D11DeviceContext* d
 		}
 	}
 
-	b.Render(d3dDeviceContext);
     ID3D11RenderTargetView* pRTV = DXUTGetD3D11RenderTargetView();
 	
     

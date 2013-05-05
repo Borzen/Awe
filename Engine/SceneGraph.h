@@ -28,6 +28,7 @@ public:
 	void SetMeshPosition(int id, D3DXMATRIXA16& newPositionMatrix);
 	void SetMeshPosition(int id, int x,int y,int z);
 	void StartScene(D3DXMATRIXA16& worldMatrix,float sceneScaling);
+	CDXUTSDKMesh* GetMesh();
 private:
 	vector<CDXUTSDKMesh*> meshList;
 	vector<D3DXMATRIXA16*> positionList;
