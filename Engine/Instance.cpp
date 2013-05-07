@@ -61,9 +61,9 @@ int Instance::GetInstanceCount()
 
 
 
-bool Instance::InitializeBuffers(ID3D11Device* device, int numInstances, D3DXVECTOR3* posArray)
+bool Instance::InitializeBuffers(ID3D11Device* device, int numInstances, D3DXMATRIX* posArray)
 {
-	InstanceType* instances;
+	MeshInstance* instances;
 	D3D11_BUFFER_DESC instanceBufferDesc;
     D3D11_SUBRESOURCE_DATA instanceData;
 	HRESULT result;
@@ -72,7 +72,7 @@ bool Instance::InitializeBuffers(ID3D11Device* device, int numInstances, D3DXVEC
 	m_instanceCount = numInstances;
 
 	// Create the instance array.
-	instances = new InstanceType[m_instanceCount];
+	instances = new MeshInstance[m_instanceCount];
 	if(!instances)
 	{
 		return false;
@@ -80,11 +80,11 @@ bool Instance::InitializeBuffers(ID3D11Device* device, int numInstances, D3DXVEC
 
 	// Load the instance array with data.
 	for(int i = 0; i < numInstances; i++){
-		instances[i].position = posArray[i];
+		instances[i].position.insert(posArray[i]);
 	}
 	// Set up the description of the instance buffer.
     instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    instanceBufferDesc.ByteWidth = sizeof(InstanceType) * m_instanceCount;
+    instanceBufferDesc.ByteWidth = sizeof(MeshInstance) * m_instanceCount;
     instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     instanceBufferDesc.CPUAccessFlags = 0;
     instanceBufferDesc.MiscFlags = 0;

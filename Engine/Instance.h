@@ -6,6 +6,7 @@
 //////////////
 #include <d3d11.h>
 #include <d3dx10math.h>
+#include <vector>
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,9 +15,10 @@
 class Instance
 {
 private:
-	struct InstanceType
-	{
-		D3DXVECTOR3 position;
+	struct MeshInstance{
+
+		std::vector<D3DXMATRIX> position;
+
 	};
 
 public:
@@ -24,15 +26,19 @@ public:
 	Instance(const Instance&);
 	~Instance();
 
+	bool Initialize();
 	bool Initialize(ID3D11Device*, int, D3DXVECTOR3*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
-	bool UpdatePos(D3DXVECTOR3);
+	bool UpdatePos(D3DXMATRIX);
 	int GetInstanceCount();
-	
+	int AddInstance(D3DXMATRIX);
+	void setPosition(int, D3DXMATRIX);
+
 	
 private:
-	bool InitializeBuffers(ID3D11Device*,int,D3DXVECTOR3*);
+	bool InitializeBuffers();
+	bool InitializeBuffers(ID3D11Device*,int,D3DXMATRIX*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 

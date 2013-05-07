@@ -1,0 +1,9 @@
+in the scenegraph vector<MeshInstance> 
+MeshInstance
+	vector<Matrices> Positions
+
+	Methods
+		return int ID AddInstance(position);
+		Initialize(); //default cube
+		Initialze(buffers);
+		setPosition(id, position);
